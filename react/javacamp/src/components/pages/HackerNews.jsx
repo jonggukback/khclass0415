@@ -8,4 +8,4 @@ function HackerNews(props) {
     );
 }
 
-export default HackerNews;
+export { HackerNews} 

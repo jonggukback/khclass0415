@@ -1,9 +1,21 @@
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Routes,Route } from 'react-router-dom';
+import { Login } from './components/pages/Login'
+import { Main } from './components/pages/Main'
+import { HackerNews } from './components/pages/HackerNews'
 
-function App() {
+function App({ authService }) {
   return (
     <>
-      <h1>Hello yarn+React :)</h1>
+      <Routes>
+        <Route path="/" exact={true} element={<Main />} />
+        <Route path="/main/:userId" exact={true} element={
+          <Main authService={authService} />
+        } />
+        <Route path="/hacker" exact={true} element={<HackerNews/>} />
+      </Routes>
+
     </>
   );
 }

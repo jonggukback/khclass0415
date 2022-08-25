@@ -1,11 +1,12 @@
 import React from 'react';
+import Top from '../header/Top';
 
 function Main(props) {
     return (
-        <div>
-            
-        </div>
+        <>
+            <Top />
+        </>
     );
 }
 
-export default Main;
+export { Main }
