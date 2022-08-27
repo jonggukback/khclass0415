@@ -1,11 +1,15 @@
-import React from 'react';
+import React from "react";
+import Bottom from "../footer/Bottom";
+import Top from "../header/Top";
 
 function HackerNews(props) {
-    return (
-        <div>
-            
-        </div>
-    );
+  return (
+    <>
+      <Top />
+      <div>해커뉴스</div>
+      <Bottom />
+    </>
+  );
 }
 
-export { HackerNews} 
+export default HackerNews;

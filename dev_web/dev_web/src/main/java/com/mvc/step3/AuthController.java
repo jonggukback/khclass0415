@@ -43,7 +43,7 @@ public class AuthController implements Controller3 {
 		HttpSession session = req.getSession();
 		s_name = authLogic.login(pMap);
 		session.setAttribute("s_name", s_name);
-		String path = "redirect:index.jsp";
+		String path = "redirect:login.jsp";
 		return path;
 	}
 	
