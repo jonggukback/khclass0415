@@ -18,6 +18,8 @@ public interface Controller3 {
 	public Object login(HttpServletRequest req, HttpServletResponse res);
 	// 쿠키 로그인 추상메소드 선언
 	public Object clogin(HttpServletRequest req, HttpServletResponse res);
+	// 회원 관리 메소드
+	public Object memberList(HttpServletRequest req, HttpServletResponse res);
 	// 게시판 추상메소드 시작
 	public Object boardList(HttpServletRequest req, HttpServletResponse res);
 	public Object boardDetail(HttpServletRequest req, HttpServletResponse res);

@@ -97,6 +97,18 @@ public class HandlerMapping {
 				}
 			}
 		}
+		else if("member".equals(upmu[0])) {//배열의 첫방에 업무폴더이름) {
+			controller = new MemberController();
+			if("memberList".equals(upmu[1])) {
+				// 파리미터로 원본을 넘긴다
+				obj = controller.memberList(req,res);
+				if(obj instanceof ModelAndView) {
+					return (ModelAndView)obj;
+				}else if(obj instanceof String) {
+					return (String)obj;
+				}
+			}
+		}
 		return obj;
 	}////////////end of getController
 }

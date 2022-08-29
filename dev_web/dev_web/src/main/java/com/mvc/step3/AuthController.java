@@ -89,6 +89,11 @@ public class AuthController implements Controller3 {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public Object memberList(HttpServletRequest req, HttpServletResponse res) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 
 

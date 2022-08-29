@@ -6,21 +6,16 @@
     <meta charset="UTF-8">
     <title>인증처리 - 쿠키와 세션</title>
 	<%@ include file="../common/easyui_common.jsp" %>
+	<style type="text/css">
+		a {
+			text-decoration: none;
+		}
+	</style>
 	<script>
 	//DOM트리가 다 그려 진거니? - yes
-	$(document).ready(function(){
-		$("#dg_member").datagrid({
-			columns:[[
-				{field: 'mem_id', title:'아이디', width: 100}
-			   ,{field: 'mem_name', title:'이름', width: 120}
-			   ,{field: 'mem_address', title:'주소', width: 200}
-			]]
-		   ,data:[
-			   {mem_id:'tomato', mem_name:'이순신', mem_address: '서울시 마포구 공덕동'}
-			  ,{mem_id:'apple', mem_name:'강감찬', mem_address: '서울시 강남구 대치동'}
-			  ,{mem_id:'nice', mem_name:'김유신', mem_address: '서울시 강남구 역삼동'}
-		   ]
-		});
+ 	$(document).ready(function(){
+		$("#d_member").hide();
+		$("#d_memberInsert").hide();
 	});
 	</script>
 	<script type="text/javascript">
@@ -35,6 +30,26 @@
 		}
 		function memberList(){
 			alert("회원목록 호출 성공");
+			
+			$("#d_member").show();
+			$("#dg_member").datagrid({
+				columns:[[
+					{field: 'ID', title:'아이디', width: 100}
+				   ,{field: 'NAME', title:'이름', width: 120}
+				   ,{field: 'ZIPCODE', title:'주소', width: 200}
+				]]
+				,url:"/member/memberList.pj"
+			});
+
+			$("#d_memberInsert").hide();
+		}
+		function memberInsert(){
+			alert("회원등록 호출 성공");
+			$("#d_member").hide();
+			$("#d_memberInsert").show();
+		}
+		function memberDelete(){
+			alert("회원삭제 호출 성공");
 		}
 	</script>
 </head>
@@ -113,15 +128,15 @@
 		        <ul id="tre_gym" class="easyui-tree" style="margin:0 6px;">
 		            <li data-options="state:'closed'">
 		                <span>회원 관리</span>
-		                <ul class="member">
+		                <ul>
 		                    <li>
-		                        <span>회원 목록</span>
+		                        <a href="javascript:memberList()">회원 목록</a>
 		                    </li>
 		                    <li>
-		                        <span>회원 등록</span>
+		                    	<a href="javascript:memberInsert()">회원 등록</a>
 		                    </li>
 		                    <li>
-		                        <span>회원 삭제</span>
+		                    	<a href="javascript:memberDelete()">회원 삭제</a>
 		                    </li>
 		                </ul>
 		            </li>
@@ -156,11 +171,32 @@
         </div>
 <!-- ####################### 메뉴 영역 끝 ####################### -->
         <div data-options="region:'center',title:'TerrGYM System',iconCls:'icon-ok'">
-        	<div style="margin: 5px 0;"></div>
-        	Home > 회원관리 > 회원목록
-        	<hr>
-        	<div style="margin: 20px 0;"></div>
-        	<div id="dg_member"></div>
+        	
+        <!-- 회원 관리 -->
+        	<!-- 회원 목록 시작-->
+        	<div id="d_member">
+	        	<div style="margin: 5px 0;"></div>
+	        	Home > 회원관리 > 회원목록
+	        	<hr>
+	        	<div style="margin: 20px 0;"></div>
+	        	<div id="dg_member"></div>
+        	</div>
+        	<!-- 회원 목록 끝 -->
+        
+        	<!-- 회원 등록 시작-->
+        	<div id="d_memberInsert">
+	        	<div style="margin: 5px 0;"></div>
+	        	Home > 회원관리 > 회원등록
+	        	<hr>
+	        	<div style="margin: 20px 0;"></div>
+	        	<div>회원 등록화면</div>
+        	</div>
+        	<!-- 회원 등록 끝-->
+        	
+        
+        <!-- 쪽지 관리(받은 쪽지함,보낸 쪽지함)-->	
+        
+        
         </div>
     </div>
 </body>
