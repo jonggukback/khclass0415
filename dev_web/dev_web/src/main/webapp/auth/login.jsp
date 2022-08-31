@@ -14,11 +14,13 @@
 	<script>
 	//DOM트리가 다 그려 진거니? - yes
  	$(document).ready(function(){
-		$("#d_member").hide();
-		$("#d_memberInsert").hide();
+		$("#d_listPage").hide();
+		$("#d_insertPage").hide();
+		$("#d_deletePage").hide();
 	});
 	</script>
 	<script type="text/javascript">
+		/* 로그인 */
 		function login(){
 			const tb_id = $("#mem_id").val();
 			const tb_pw = $("#mem_pw").val();
@@ -28,28 +30,58 @@
 		function logout(){
 			location.href="./logout.jsp";
 		}
+		
+		/* 회원 페이지 */
+		function listPage(){
+			alert("회원목록 페이지");
+			$("#d_listPage").show();
+			$("#d_insertPage").hide();
+			$("#d_deletePage").hide();
+		}		
+		function insertPage(){
+			alert("회원등록 페이지");
+			$("#d_listPage").hide();
+			$("#d_insertPage").show();
+			$("#d_deletePage").hide();
+		}
+		function deletePage(){
+			alert("회원삭제 페이지");
+			$("#d_listPage").hide();
+			$("#d_insertPage").hide();
+			$("#d_deletePage").show();
+		}
+		
+		
+		/* 회원 페이지 CRUD */
 		function memberList(){
-			alert("회원목록 호출 성공");
+			const value = $("#mem_value").val();
+			const type = $("#mem_type").val();
+			let requestURL = null;
 			
-			$("#d_member").show();
+			if (value != null && value.length > 0) {
+				requestURL = "/member/memberList.pj?mem_value="+value+"&mem_type="+type;
+			}else {
+				requestURL = "/member/memberList.pj?";
+			}
+			
 			$("#dg_member").datagrid({
 				columns:[[
-					{field: 'ID', title:'아이디', width: 100}
-				   ,{field: 'NAME', title:'이름', width: 120}
-				   ,{field: 'ZIPCODE', title:'주소', width: 200}
-				]]
-				,url:"/member/memberList.pj"
+					{field: 'MEM_ID', title:'아이디', width: 100}
+				   ,{field: 'MEM_NAME', title:'이름', width: 120}
+				   ,{field: 'MEM_ADDRESS', title:'주소', width: 200}
+				   ,{field: 'BUTTON', title:'쪽지', width: 100}
+				]],
+				url: requestURL,
 			});
-
-			$("#d_memberInsert").hide();
 		}
 		function memberInsert(){
-			alert("회원등록 호출 성공");
-			$("#d_member").hide();
-			$("#d_memberInsert").show();
+			alert("회원 입력 호출 성공");
+		}
+		function memberUpdate(){
+			alert("회원 수정 호출 성공");
 		}
 		function memberDelete(){
-			alert("회원삭제 호출 성공");
+			alert("회원 삭제 호출 성공");
 		}
 	</script>
 </head>
@@ -130,13 +162,13 @@
 		                <span>회원 관리</span>
 		                <ul>
 		                    <li>
-		                        <a href="javascript:memberList()">회원 목록</a>
+		                        <a href="javascript:listPage()">회원 목록</a>
 		                    </li>
 		                    <li>
-		                    	<a href="javascript:memberInsert()">회원 등록</a>
+		                    	<a href="javascript:insertPage()">회원 등록</a>
 		                    </li>
 		                    <li>
-		                    	<a href="javascript:memberDelete()">회원 삭제</a>
+		                    	<a href="javascript:deletePage()">회원 삭제</a>
 		                    </li>
 		                </ul>
 		            </li>
@@ -174,30 +206,83 @@
         	
         <!-- 회원 관리 -->
         	<!-- 회원 목록 시작-->
-        	<div id="d_member">
+        	<div id="d_listPage">
 	        	<div style="margin: 5px 0;"></div>
 	        	Home > 회원관리 > 회원목록
 	        	<hr>
-	        	<div style="margin: 20px 0;"></div>
+	        	<div style="margin: 20px 0;" ></div>
+	        	
+
+	        	
+	        	
+	        	<div style="margin: 5px 0;" >
+	        		<!-- 조건 검색 화면 시작 -->
+		        	<select id="mem_type" name="mem_type">
+		        		<option>이름</option>
+		        		<option>아이디</option>
+		        	</select>
+	 	        	<input id="mem_value" name="mem_value" class="easyui-textbox" style="width:200px">
+		        	<!-- 조건 검색 화면 끝 -->
+	        	
+	        		<!-- 조회|입력|수정|삭제 버튼 시작 -->
+	        		<a id="btn" href="javascript:memberList()" class="easyui-linkbutton" data-options="iconCls:'icon-search'">조회</a>
+	        		<a id="btn" href="javascript:$('#dlg').dialog('open')" class="easyui-linkbutton" data-options="iconCls:'icon-add'">입력</a>
+	        		<a id="btn" href="javascript:memberUpdate()" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">수정</a>
+	        		<a id="btn" href="javascript:memberDelete()" class="easyui-linkbutton" data-options="iconCls:'icon-cut'">삭제</a>
+	        		<!-- 조회|입력|수정|삭제 버튼 끝 -->
+	        	</div>
+
+	        	<!-- 회원 목록 출력 시작 -->
 	        	<div id="dg_member"></div>
+	        	<!-- 회원 목록 출력 끝 -->
+	        	
+	        	
         	</div>
         	<!-- 회원 목록 끝 -->
         
         	<!-- 회원 등록 시작-->
-        	<div id="d_memberInsert">
+        	<div id="d_insertPage">
 	        	<div style="margin: 5px 0;"></div>
 	        	Home > 회원관리 > 회원등록
 	        	<hr>
 	        	<div style="margin: 20px 0;"></div>
-	        	<div>회원 등록화면</div>
+	        	<div>회원 등록 화면</div>
         	</div>
         	<!-- 회원 등록 끝-->
         	
+        	<!-- 회원 삭제 시작-->
+        	<div id="d_deletePage">
+	        	<div style="margin: 5px 0;"></div>
+	        	Home > 회원관리 > 회원삭제
+	        	<hr>
+	        	<div style="margin: 20px 0;"></div>
+	        	<div>회원 삭제 화면</div>
+        	</div>
+        	<!-- 회원 삭제 끝-->
+        	
         
         <!-- 쪽지 관리(받은 쪽지함,보낸 쪽지함)-->	
-        
-        
+
         </div>
+    </div>
+    <div id="dlg" class="easyui-dialog" title="제목" style="width:400px;height:200px;padding:10px"
+    	data-options="
+            	modal:true,
+            	closed:true,
+                iconCls: 'icon-save',
+                buttons: [{
+                    text:'입력',
+                    iconCls:'icon-ok',
+                    handler:function(){
+                        memberInsert();
+                    }
+                },{
+                    text:'취소',
+                    handler:function(){
+                        $('#dlg').dialog('close')
+                    }
+                }]">
+        Modal
     </div>
 </body>
 </html>
