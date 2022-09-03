@@ -16,6 +16,7 @@ public class ActionServlet extends HttpServlet {
 	Logger logger = Logger.getLogger(ActionServlet.class);
 	public void doService(HttpServletRequest req, HttpServletResponse res)
 	throws ServletException, IOException{
+		
 		logger.info("doService 호출 성공");
 		// 요청 URL을 통해서 해당하는 업무의 컨트롤 클래스 객체를 주입받고 
 		// 메소드 이름까지도 결정할 수 있다면 좋을 것 같은데.... 흠

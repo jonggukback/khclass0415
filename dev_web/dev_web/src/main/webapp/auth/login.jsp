@@ -1,5 +1,17 @@
+<%@ page import="com.vo.MemberVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+	MemberVO mVO = (MemberVO) session.getAttribute("mVO");
+	String s_id = null;
+	String s_name = null;
+	
+	if (mVO != null){
+		s_id = mVO.getId();
+		s_name = mVO.getName();
+	}
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,7 +36,6 @@
 		function login(){
 			const tb_id = $("#mem_id").val();
 			const tb_pw = $("#mem_pw").val();
-			alert("./login.pj?mem_id="+tb_id+"&mem_pw="+tb_pw);
 			location.href="./login.pj?mem_id="+tb_id+"&mem_pw="+tb_pw;
 		}
 		function logout(){
@@ -53,6 +64,7 @@
 		
 		
 		/* 회원 페이지 CRUD */
+		let memo = null;
 		function memberList(){
 			const value = $("#mem_value").val();
 			const type = $("#mem_type").val();
@@ -64,14 +76,15 @@
 				requestURL = "/member/memberList.pj?";
 			}
 			
+
 			$("#dg_member").datagrid({
-				columns:[[
-					{field: 'MEM_ID', title:'아이디', width: 100}
-				   ,{field: 'MEM_NAME', title:'이름', width: 120}
-				   ,{field: 'MEM_ADDRESS', title:'주소', width: 200}
-				   ,{field: 'BUTTON', title:'쪽지', width: 100}
-				]],
 				url: requestURL,
+				onClickRow: function(index,row){
+					console.log("index: "+index);
+					console.log(row);
+					memo = row.ID;
+					alert(memo);
+				}
 			});
 		}
 		function memberInsert(){
@@ -102,13 +115,12 @@
     <div style="margin:20px 0;"></div>
     <div class="easyui-layout" style="width:1000px;height:500px;">
         <div data-options="region:'south',split:true" style="height:50px;"></div>
+		<!-- ####################### SIDE 영역 시작 ####################### -->
         <div data-options="region:'west',split:true" title="KH정보교육원" style="width:200px;">
 <%
-	String s_name = (String)session.getAttribute("s_name");
-	
-	if(s_name == null){
+		if(s_name == null){
 %>
-<!-- ####################### 로그인 영역 시작 ####################### -->
+			<!-- ####################### 로그인 영역 시작 ####################### -->
 			<div style="margin: 10px 0;"></div>
 			<div id="d_login" align="center">
 				<div style="margin: 3x 0;"></div>
@@ -136,11 +148,11 @@
 					회원가입
 				</a>
 			</div>
-<!-- ####################### 로그인 영역 끝 ####################### -->
+			<!-- ####################### 로그인 영역 끝 ####################### -->
 <%
-	} else {
+		} else {
 %>
-<!-- ####################### 로그아웃 영역 시작 ####################### -->
+			<!-- ####################### 로그아웃 영역 시작 ####################### -->
 			<div id="d_logout" align="center" >
 				<div id="d_ok"><%= s_name%>님 환영합니다.</div>
 				<div style="margin: 10x 0;"></div>
@@ -151,11 +163,9 @@
 					정보수정
 				</a>
 			</div>
-<!-- ####################### 로그아웃 영역 끝 ####################### -->
-<%
-	}
-%>
-<!-- ####################### 메뉴 영역 시작 ####################### -->
+			<!-- ####################### 로그아웃 영역 끝 ####################### -->
+
+			<!-- ####################### 메뉴 영역 시작 ####################### -->
 		    <div style="margin:20px 0;"></div>
 		        <ul id="tre_gym" class="easyui-tree" style="margin:0 6px;">
 		            <li data-options="state:'closed'">
@@ -200,21 +210,23 @@
 		            	</ul>
 		            </li>
 		        </ul>
-        </div>
-<!-- ####################### 메뉴 영역 끝 ####################### -->
+				<!-- ####################### 메뉴 영역 끝 ####################### -->
+<%
+	}
+%>
+		</div>
+		<!-- ####################### SIDE 영역 끝 ####################### -->
+
+		<!-- ####################### MAIN 영역 시작 ####################### -->
         <div data-options="region:'center',title:'TerrGYM System',iconCls:'icon-ok'">
-        	
-        <!-- 회원 관리 -->
+
         	<!-- 회원 목록 시작-->
         	<div id="d_listPage">
 	        	<div style="margin: 5px 0;"></div>
 	        	Home > 회원관리 > 회원목록
 	        	<hr>
 	        	<div style="margin: 20px 0;" ></div>
-	        	
 
-	        	
-	        	
 	        	<div style="margin: 5px 0;" >
 	        		<!-- 조건 검색 화면 시작 -->
 		        	<select id="mem_type" name="mem_type">
@@ -233,10 +245,18 @@
 	        	</div>
 
 	        	<!-- 회원 목록 출력 시작 -->
-	        	<div id="dg_member"></div>
+	        	<table id="dg_member" class="easyui-datagrid" style="width:90%;height:250px"
+        				data-options="fitColumns:true,singleSelect:true">
+				    <thead>
+				        <tr>
+				            <th data-options="field:'ID',width:50,align:'center'">아이디</th>
+				            <th data-options="field:'NAME',width:50,align:'center'">이름</th>
+				            <th data-options="field:'ZIPCODE',width:100,align:'center'">주소</th>
+				            <th data-options="field:'BUTTON',width:50,align:'center'">버튼</th>
+				        </tr>
+				    </thead>
+				</table>
 	        	<!-- 회원 목록 출력 끝 -->
-	        	
-	        	
         	</div>
         	<!-- 회원 목록 끝 -->
         
@@ -261,28 +281,29 @@
         	<!-- 회원 삭제 끝-->
         	
         
-        <!-- 쪽지 관리(받은 쪽지함,보낸 쪽지함)-->	
+	        <!-- 쪽지 관리(받은 쪽지함,보낸 쪽지함)-->	
+		    <div id="dlg" class="easyui-dialog" title="쪽지 보내기" style="width:400px;height:200px;padding:10px"
+		    	data-options="
+		            	modal:true,
+		            	closed:true,
+		                iconCls: 'icon-save',
+		                buttons: [{
+		                    text:'입력',
+		                    iconCls:'icon-ok',
+		                    handler:function(){
+		                        memberInsert();
+		                    }
+		                },{
+		                    text:'취소',
+		                    handler:function(){
+		                        $('#dlg').dialog('close')
+		                    }
+		                }]">
+		        쪽지 보내기
+		    </div>
 
         </div>
-    </div>
-    <div id="dlg" class="easyui-dialog" title="제목" style="width:400px;height:200px;padding:10px"
-    	data-options="
-            	modal:true,
-            	closed:true,
-                iconCls: 'icon-save',
-                buttons: [{
-                    text:'입력',
-                    iconCls:'icon-ok',
-                    handler:function(){
-                        memberInsert();
-                    }
-                },{
-                    text:'취소',
-                    handler:function(){
-                        $('#dlg').dialog('close')
-                    }
-                }]">
-        Modal
-    </div>
+		<!-- ####################### MAIN 영역 끝 ####################### -->
+	</div>
 </body>
 </html>

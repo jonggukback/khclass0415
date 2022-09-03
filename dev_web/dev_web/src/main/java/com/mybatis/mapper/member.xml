@@ -3,6 +3,20 @@
 <mapper namespace="com.mybatis.mapper.boardMapper">
 
 	<select id="memberList" parameterType="java.util.Map" resultType="map">
+		select id, name, zipcode, '쪽지보내기' as button
+		  from member2
+		<where>
+			<if test='mem_type != null and mem_type.equals("아이디")'>
+				AND id LIKE '%'||#{mem_value}||'%'
+			</if>
+			<if test='mem_type != null and mem_type.equals("이름")'>
+				AND name LIKE '%'||#{mem_value}||'%'
+			</if>
+		</where>
+		ORDER BY name asc
+	</select>
+	
+<!-- 	<select id="memberList" parameterType="java.util.Map" resultType="map">
 		select mem_id, mem_name, mem_address, '쪽지보내기' as button
 		  from member
 		<where>
@@ -14,5 +28,5 @@
 			</if>
 		</where>
 		ORDER BY mem_name asc
-	</select>
+	</select> -->
 </mapper>
